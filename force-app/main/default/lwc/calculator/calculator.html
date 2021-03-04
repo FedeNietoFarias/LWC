@@ -1,3 +1,101 @@
 <template>
-    
+    <lightning-card  title="Calculator">
+        <div class="slds-size_1-of-2">
+            <lightning-input type="text" label="Calc Expression" read-only="true" value={operator}></lightning-input>
+            <lightning-input type="text" label="Result" value ={finalResult}></lightning-input>
+        </div>
+        <table>
+            <tr>
+                <td>
+                    <div class="slds-truncate">
+                        <lightning-button label="1" title="Non-primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-truncate">
+                        <lightning-button label="2" title="Non-primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-truncate">
+                        <lightning-button label="3" title="Non-primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-truncate">
+                        <lightning-button variant="Brand" label="+" title="Primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="slds-truncate">
+                        <lightning-button label="4" title="Non-primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-truncate">
+                        <lightning-button label="5" title="Non-primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-truncate">
+                        <lightning-button label="6" title="Non-primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-truncate">
+                        <lightning-button variant="Brand" label="-" title="Primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="slds-truncate">
+                        <lightning-button label="7" title="Non-primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-truncate">
+                        <lightning-button label="8" title="Non-primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-truncate">
+                        <lightning-button label="9" title="Non-primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-truncate">
+                        <lightning-button variant="Brand" label="*" title="Primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <div class="slds-truncate">
+                        <lightning-button label="CLR" title="Non-primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-truncate">
+                        <lightning-button label="0" title="Non-primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-truncate">
+                        <lightning-button variant="Success" label="=" title="Successful action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-truncate">
+                        <lightning-button variant="brand" label="/" title="Primary action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </lightning-card>
 </template>
