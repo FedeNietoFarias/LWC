@@ -1,43 +1,102 @@
-import { LightningElement,api, track } from 'lwc';
+import { LightningElement } from 'lwc';
 
 export default class Calculator extends LightningElement {
-    numbers=[];
-    handleClick(event){
-       console.log('ENTROOO');
-       var operator=event.target.label;
-       var number;
-       
-       console.log(operator);
-       if(operator==='/'){
-
-       }
-
-       else if(operator ==='*'){
-
-       }
-
-       else if(operator ==='-'){
-           
+    calcResult = '';
+    calcExpression = '';
+    clrExpression = false;
+    prevOper = '';
+    operations = {
+        current: 0,
+        '=': function(){
+            return this.current;
+        },
+        '+': function(n){
+            this.current += parseInt(n);
+            return this;
+        },
+        '-': function(n){
+            this.current -= parseInt(n);
+            return this;
+        },
+        '*': function(n){
+            this.current *= parseInt(n);
+            return this;
+        },
+        '/': function(n){
+            this.current /= parseInt(n);
+            return this;
         }
-
-       else if(operator ==='+'){
-           
-        }
-
-       else if(operator ==='+'){
-           
-        }
-
-        else{
-            number = parseInt(operator,10);
-            
-            this.numbers = [...this.numbers, number];
-            
-        }
-        
-        console.log(this.numbers);
-        
-
     }
-    
+
+    get showResult(){
+        return this.operations.current;
+    }
+
+    handleClick(event){
+        if (this.clrExpression){
+            this.calcExpression = '';
+            this.calcResult = '';
+            this.operations.current = 0;
+            this.clrExpression = false;
+        }
+        this.calcExpression = this.calcExpression + event.target.label;
+        if (event.target.label === "CLR"){
+            this.calcResult = '';
+            this.calcExpression = '';
+            this.operations.current = 0;
+        }
+        else if (event.target.label === "+"){
+            if (this.operations.current === 0)
+            {
+                this.operations.current = parseInt(this.calcResult);
+            }
+            else{
+                this.calcResult = this.operations[this.prevOper](this.calcResult);
+            }
+            this.prevOper = '+';
+            this.calcResult = '';
+        }
+        else if (event.target.label === "-"){
+            if (this.operations.current === 0)
+            {
+                this.operations.current = parseInt(this.calcResult);
+            }
+            else{
+                this.calcResult = this.operations[this.prevOper](this.calcResult);
+            }
+            this.prevOper = '-';
+            this.calcResult = '';
+        }
+        else if (event.target.label === "*"){
+            if (this.operations.current === 0)
+            {
+                this.operations.current = parseInt(this.calcResult);
+            }
+            else{
+                this.calcResult = this.operations[this.prevOper](this.calcResult);
+            }
+            this.prevOper = '*';
+            this.calcResult = '';
+        }
+        else if (event.target.label === "/"){
+            if (this.operations.current === 0)
+            {
+                this.operations.current = parseInt(this.calcResult);
+            }
+            else{
+                this.calcResult = this.operations[this.prevOper](this.calcResult);
+            }
+            this.prevOper = '/';
+            this.calcResult = '';
+        }
+        else if (event.target.label === "="){
+            this.calcResult = this.operations[this.prevOper](this.calcResult);
+            this.calcResult = this.operations['=']();
+            this.clrExpression = true;
+        }
+        else{
+            this.calcResult = this.calcResult + event.target.label;
+            
+        }
+    }
 }
