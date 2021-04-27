@@ -1,8 +1,8 @@
 //Trigger of Lead
-trigger TLead on Lead (before insert) {
+trigger LeadTrigger on Lead (before insert) {
     if (Trigger.isBefore){
         if(Trigger.isInsert){
-            TLeadTriggerHandler.verifyRepetedMail(Trigger.new);
+            LeadHelper.verifyRepetedMail(Trigger.new);
            
         }          
     }
