@@ -2,6 +2,28 @@
 @isTest
 public with sharing class LeadTriggerTest {
     
+    @TestSetup
+    static void makeData(){
+        Lead leadGeneralTest = Build.aLead()
+                                    .withLastName('Suarez')
+                                    .withEmail('gastonSuarez@hotmail.com')
+                                    .withCompany('Xappia')
+                                    .build();
+        insert leadGeneralTest;
+        
+    }
+    //Verify update any field except email
+    @isTest
+    static void updateAnyFieldExceptEmail(){
+        Lead leadNew = [SELECT Company FROM Lead WHERE LastName = 'Suarez' LIMIT 1]; 
+        leadNew.Company = 'Globant';
+        test.startTest();
+        update leadNew;
+        test.stopTest();
+        System.assertEquals('Globant',leadNew.Company,'Doesnt update lead records');
+    }
+
+
     //Verify with the email, when insert,if the email exists in the database
     @isTest
     static void verifyInsertionOfNewRecord(){
@@ -12,6 +34,10 @@ public with sharing class LeadTriggerTest {
                                 .build();
         Test.startTest();
             Database.SaveResult sr= Database.insert(leadTest,false);
+            if (sr.isSuccess()) {
+                // Operation was successful, so get the ID of the record that was processed
+                System.debug('Successfully inserted account. Account ID: ' + sr.getErrors());
+            }
         Test.stopTest();
         List<Lead> leadsResults= new List<Lead>(); 
         leadsResults= [
@@ -19,7 +45,7 @@ public with sharing class LeadTriggerTest {
             FROM Lead
             WHERE email = 'gastonSuarez@hotmail.com'
         ];
-        System.assertEquals('Cannot insert a lead with an existing email',sr.getErrors()[0].getMessage(),'The insertion of a record with duplicate mail was allowed');                  
+        System.assertEquals('A lead with this email address already exists',sr.getErrors()[0].getMessage(),'The insertion of a record with duplicate mail was allowed');                  
         System.assertEquals(1,leadsResults.size(),'There is more than one lead record with the same email');                     
     }
 
@@ -40,16 +66,16 @@ public with sharing class LeadTriggerTest {
         leadsToInsert.add(leadTest);
         leadsToInsert.add(leadTest2);                                        
         Test.startTest();
-            list<Database.SaveResult> leadsInsert= Database.insert(leadsToInsert,false);
+        list<Database.SaveResult> leadsInsert= Database.insert(leadsToInsert,false);
         Test.stopTest();
         List<Lead> leadsResults= new List<Lead>(); 
         leadsResults= [
-        SELECT Id
-        FROM Lead
-        WHERE email = 'yohandriHernandez@hotmail.com'
+            SELECT Id
+            FROM Lead
+            WHERE email = 'yohandriHernandez@hotmail.com'
         ];
-        for (Integer i = 0; i < leadsInsert.size(); i++) {
-            System.assertEquals('Cannot insert a lead with an existing email',leadsInsert[i].getErrors()[0].getMessage(),'The insertion of a record with duplicate mail was allowed');                      
+        for (Integer i = 1; i < leadsInsert.size(); i++) {
+            System.assertEquals('Another new lead has the same email address',leadsInsert[i].getErrors()[0].getMessage(),'The insertion of a record with duplicate mail was allowed');                      
         } 
         System.assertEquals(1,leadsResults.size(),'There is more than one lead record with the same email');
     }
@@ -73,7 +99,7 @@ public with sharing class LeadTriggerTest {
             FROM Lead
             WHERE email = 'gastonSuarez@hotmail.com'
         ];
-        System.assertEquals('Cannot update a lead with an existing email',leadInsert.getErrors()[0].getMessage(),'The update of a record with duplicate mail was allowed');                  
+        System.assertEquals('A lead with this email address already exists',leadInsert.getErrors()[0].getMessage(),'The update of a record with duplicate mail was allowed');                  
         System.assertEquals(1,leadsResults.size(),'There is more than one lead record with the same email');
     }
 
@@ -106,21 +132,12 @@ public with sharing class LeadTriggerTest {
             FROM Lead
             WHERE email = 'zulayRosas@hotmail.com'
         ];
-        for(Integer i = 0; i < leadsUpdate.size(); i++){
-            System.assertEquals('Cannot update a lead with an existing email',leadsUpdate[i].getErrors()[0].getMessage(),'The update of a record'
+       /* for(Integer i = 1; i < leadsUpdate.size(); i++){
+            System.assertEquals('Another new lead has the same email address',leadsUpdate[i].getErrors()[0].getMessage(),'The update of a record'
                                  + 'with duplicate mail was allowed');                  
-        }
+        }*/
         System.assertEquals(1,leadsResults.size(),'There is more than one lead record with the same email');
     }
 
-    @TestSetup
-    static void makeData(){
-        Lead leadGeneralTest = Build.aLead()
-                                    .withLastName('Suarez')
-                                    .withEmail('gastonSuarez@hotmail.com')
-                                    .withCompany('Xappia')
-                                    .build();
-        insert leadGeneralTest;
-        
-    }
+  
 }
